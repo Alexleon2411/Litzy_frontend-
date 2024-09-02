@@ -1,23 +1,20 @@
 <script setup>
 import Banner from '../components/Banner.vue'
-import NavBar from '../components/NavBar.vue'
+
 import Services from '../components/ServicesLayout.vue'
+import Footer from '../components/Footer.vue'
 
 
 </script>
 
 <template>
-  <div class=" flex justify-center">
+  <!-- <div class=" flex justify-center">
     <div class="flex justify-between h-1/5 w-20 items-center">
       <span class="mdi mdi-facebook"></span>
       <span class="mdi mdi-instagram"></span>
       <span class="mdi mdi-whatsapp"></span>
     </div>
-  </div>
-  <div>
-    <NavBar/>
-  </div>
-
+  </div> -->
   <Banner/>
 
   <div class=" w-11/12 lg:w-3/5 w-1/2 justify-start flex mx-auto py-20">
@@ -28,7 +25,7 @@ import Services from '../components/ServicesLayout.vue'
         nuestro objetivo es ofrecerle una atención personalizada que se adapte perfectamente a sus necesidades y espectativas
       </p>
       <button type="button" class="local-button">
-        Nuestra Estetica
+        <RouterLink>Nuestra Estetica</RouterLink>
       </button>
     </div>
   </div>

@@ -11,6 +11,21 @@ const router = createRouter({
       component: HomeView
     },
     {
+      path: '/contacto',
+      name: 'contacto',
+      component: () => import('@/views/ContactView.vue'),
+    },
+    {
+      path: '/blog',
+      name: 'blog',
+      component: () => import('@/views/BlogView.vue'),
+    },
+    {
+      path: '/result',
+      name: 'resultado',
+      component: () => import('@/views/ResultView.vue'),
+    },
+    {
       path: '/reservaciones',
       name: 'appoitments',
       component: appoitmentsLayout,

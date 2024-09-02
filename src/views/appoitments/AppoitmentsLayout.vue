@@ -1,11 +1,9 @@
-<script>
-  export default {
+<script setup>
 
-  }
 </script>
 <template>
-  <div class="flex justify-between">
-    <h1 class="text-2xl lg:text-6xl font-black text-white">appoitmente layout</h1>
+  <!-- <div class="flex justify-between">
+    <h1 class="text-2xl lg:text-6xl font-black text-gray">appoitmente layout</h1>
     <div class="flex flex-col space-y-5">
       <div class="flex gap-2 items-center">
         <p text-white text-right>Hola: usuario</p>
@@ -28,7 +26,7 @@
         </RouterLink>
       </nav>
     </div>
-  </div>
+  </div> -->
   <main>
     <RouterView></RouterView>
   </main>

@@ -37,7 +37,7 @@
 </script>
 
 <template>
-  <nav class="fixed top-5 left-0 right-0 z-50 bg-white shadow-lg">
+  <nav class="fixed top-0 left-0 right-0 z-50 bg-white shadow-lg">
     <div class="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
       <div class="relative flex h-16 items-center justify-between">
         <div class="absolute inset-y-0 left-0 flex items-center sm:hidden">
@@ -72,16 +72,25 @@
         </div>
         <div class="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
           <div class="flex flex-shrink-0 items-center">
-            <img class="h-12 w-auto justify-center" src="/img/logo1.png" alt="Logo Litzy">
+            <RouterLink :to="{name: 'home'}">
+              <img class="h-12 w-auto justify-center" src="/img/logo1.png" alt="Logo Litzy">
+            </RouterLink>
           </div>
           <div class="hidden sm:ml-6 sm:block">
             <div class="flex space-x-4">
-              <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
-              <a href="#" class="rounded-md px-3 py-2 text-sm font-medium text-gray-700 hover:bg-blue-900 hover:text-white" aria-current="page">Servicios</a>
-              <a href="#" class="rounded-md px-3 py-2 text-sm font-medium text-gray-700 hover:bg-blue-900 hover:text-white">Contacto</a>
-              <a href="#" class="rounded-md px-3 py-2 text-sm font-medium text-gray-700 hover:bg-blue-900 hover:text-white">Blog</a>
-              <a href="#" class="rounded-md px-3 py-2 text-sm font-medium text-gray-700 hover:bg-blue-900 hover:text-white">Resultados</a>
-              <a href="#" class="rounded-md px-3 py-2 text-sm font-medium text-gray-700 hover:bg-blue-900 hover:text-white">Promosiones</a>
+              <!-- big screen/ pantalla grande-->
+                <RouterLink :to="{name: 'new-appoitment'}" class="rounded-md px-3 py-2 text-sm font-medium text-blue-900 hover:bg-blue-900 hover:text-white  ease-in duration 900">
+                  Servicios
+                </RouterLink>
+                <RouterLink :to="{name: 'contacto'}" class="rounded-md px-3 py-2 text-sm font-medium text-blue-900 hover:bg-blue-900 hover:text-white  ease-in duration 900">
+                  Contacto
+                </RouterLink>
+                <RouterLink :to="{name: 'blog'}" class="rounded-md px-3 py-2 text-sm font-medium text-blue-900 hover:bg-blue-900 hover:text-white  ease-in duration 900">
+                  Blog
+                </RouterLink>
+                <RouterLink :to="{name: 'resultado'}" class="rounded-md px-3 py-2 text-sm font-medium text-blue-900 hover:bg-blue-900 hover:text-white  ease-in duration 900">
+                  Resultados
+                </RouterLink>
             </div>
           </div>
         </div>
@@ -123,11 +132,18 @@
     <div class="sm:hidden" id="mobile-menu" v-if="ShowMobileMenu">
       <div class="space-y-1 px-2 pb-3 pt-2 ">
         <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
-        <a href="#" class="mobile-link block rounded-md px-3 py-2 text-base bg-purple-100 font-medium text-gray-600 hover:bg-purple-600 hover:text-white" aria-current="page">Servicios</a>
-        <a href="#" class="mobile-link block rounded-md px-3 py-2 text-base bg-purple-100 font-medium text-gray-600 hover:bg-purple-600 hover:text-white">Contacto</a>
-        <a href="#" class="mobile-link block rounded-md px-3 py-2 text-base bg-purple-100 font-medium text-gray-600 hover:bg-purple-600 hover:text-white">Blog</a>
-        <a href="#" class="mobile-link block rounded-md px-3 py-2 text-base bg-purple-100 font-medium text-gray-600 hover:bg-purple-600 hover:text-white">Resultados</a>
-        <a href="#" class="mobile-link block rounded-md px-3 py-2 text-base bg-purple-100 font-medium text-gray-600 hover:bg-purple-600 hover:text-white">Promosiones</a>
+        <RouterLink :to="{name: 'new-appoitment'}" @click="ShowMobileMenu = !ShowMobileMenu"  class="mobile-link block rounded-md px-3 py-2 text-base bg-purple-100 font-medium text-gray-600 hover:bg-purple-600 hover:text-white">
+          Servicios
+        </RouterLink>
+        <RouterLink :to="{name: 'contacto'}" @click="ShowMobileMenu = !ShowMobileMenu"  class="mobile-link block rounded-md px-3 py-2 text-base bg-purple-100 font-medium text-gray-600 hover:bg-purple-600 hover:text-white">
+          Contacto
+        </RouterLink>
+        <RouterLink :to="{name: 'blog'}" @click="ShowMobileMenu = !ShowMobileMenu" class="mobile-link block rounded-md px-3 py-2 text-base bg-purple-100 font-medium text-gray-600 hover:bg-purple-600 hover:text-white">
+          Blog
+        </RouterLink>
+        <RouterLink :to="{name: 'resultado'}" @click="ShowMobileMenu = !ShowMobileMenu" class="mobile-link block rounded-md px-3 py-2 text-base bg-purple-100 font-medium text-gray-600 hover:bg-purple-600 hover:text-white">
+          Resultados
+        </RouterLink>
         <a href="#" class="mobile-link block rounded-md px-3 py-2 text-base bg-purple-100 font-medium text-gray-600 hover:bg-purple-600 hover:text-white">Crear Cita</a>
       </div>
     </div>
