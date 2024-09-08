@@ -1,9 +1,19 @@
-import api from '@/lib/axios';
+import api from '../lib/axios';
 
 export default {
    all() {
-    // este metodo es creado para obtener todos los servicios que se encuentran en la base de datos
-    // cada metodo es llamado infdividualmente con si se estuviera llamando axios dentro de la store 
     return api.get('/services')
+   },
+   getOne(id) {
+    return api.get(`/services/${id}`)
+   },
+   createService(data){
+    return api.post('/services', data)
+   },
+   updateService(id, data){
+    return api.put(`/services/${id}`, data)
+   },
+   deleteService(id) {
+    return api.delete(`/services/${id}`)
    }
 }

@@ -8,20 +8,20 @@
         <!-- Logo or Icon -->
         <img src="/img/logo1.png" alt="Logo" class="h-10 w-auto lg:h-16" />
         <div class="mt-8 flex justify-center space-x-6">
-        <a href="#" class="text-blue-800 hover:text-blue-900 text-4xl">
+        <a href="#" class="text-pink-500 hover:text-pink-600 text-4xl">
           <span class="sr-only">Facebook</span>
           <i class="mdi mdi-facebook"></i>
         </a>
-        <a href="#" class="text-blue-800 hover:text-blue-900 text-4xl">
+        <a href="#" class="text-pink-500 hover:text-pink-600 text-4xl">
           <span class="sr-only">Instagram</span>
           <i class="mdi mdi-instagram"></i>
         </a>
-        <a href="#" class="text-blue-800 hover:text-blue-900 text-4xl">
+        <a href="#" class="text-pink-500 hover:text-pink-600 text-4xl">
           <span class="sr-only">Twitter</span>
           <i class="mdi mdi-twitter"></i>
         </a>
 
-        <a href="#" class="text-blue-800 hover:text-blue-900 text-4xl">
+        <a href="#" class="text-pink-500 hover:text-pink-600 text-4xl">
           <span class="sr-only">Whatsapp</span>
           <i class="mdi mdi-whatsapp"></i>
         </a>

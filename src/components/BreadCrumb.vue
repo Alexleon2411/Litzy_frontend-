@@ -20,9 +20,38 @@
     return name.charAt(0).toUpperCase() + name.slice(1)
   }
 
+  const getLink = (path) => {
+    // Verifica si el path contiene "admin"
+    if (path.includes('admin')) {
+      return '/admin/panel-services'; // Redirige a panel-services
+    }
+    return path; // Si no, devuelve el path original
+  }
+
+  const breadcrumbTitle = computed(() => {
+    const currentRoute = route.name;
+    switch (currentRoute) {
+      case 'contacto':
+        return 'Contacto';
+      case 'nueva':
+        return 'Selecciona el servicio que deseas ';
+      case 'appoitments':
+      case 'new-appoitment':
+        return 'Haz una cita con Litzy Estética';
+      case 'blog':
+        return 'Bienvenidos a nuestro blog';
+      case 'resultado':
+        return 'Nuestra Sección de antes y despues ';
+      case 'creaServicio':
+        return 'Crear un nuevo servicio';
+      default:
+        return 'Litzy Estética';
+    }
+  });
+
 </script>
 <template>
-  <div class="bg-white p-6  mt-4 rounded-lg  w-11/12 justify-start flex-col mx-auto">
+  <div class="bg-white p-6  rounded-lg  w-11/12 justify-start flex-col mx-auto">
     <nav class="flex" aria-label="Breadcrumb">
       <ol class="flex items-center space-x-4">
         <li  v-for="(crumb, index) in breadcrumbs" :key="index">
@@ -43,11 +72,11 @@
               </g>
             </svg>
             <router-link
-            :to="crumb.path" class="ml-4 text-sm font-medium text-blue-900 hover:text-gray-700"> {{ crumb.name }}</router-link>
+            :to="getLink(crumb.path)" class="ml-4 text-sm font-medium text-blue-900 hover:text-gray-700"> {{ crumb.name }}</router-link>
           </div>
         </li>
       </ol>
     </nav>
-    <h1 class="text-blue-900 p-2">Has una cita con Litzy Estetica</h1>
+    <h1 class="text-blue-900 p-2">{{breadcrumbTitle}}</h1>
   </div>
 </template>
