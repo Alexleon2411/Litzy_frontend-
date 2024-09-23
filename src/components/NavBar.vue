@@ -1,6 +1,6 @@
 
 <script setup>
-  import { ref, onMounted, nextTick } from 'vue'
+  import { ref, onMounted, onBeforeUnmount, nextTick} from 'vue'
 
   const ShowUserMenu = ref(false);
   const ShowMobileMenu = ref(false);
@@ -9,21 +9,29 @@
   const toggleMenu = async () => {
     ShowMobileMenu.value = !ShowMobileMenu.value;
 
-    if ( ShowMobileMenu.value){
-      await nextTick(); // to tell Vue to update De DOM
+    if (ShowMobileMenu.value) {
+      await nextTick(); // to tell Vue to update the DOM
       const link = document.querySelectorAll('.mobile-link');
       link.forEach((link, index) => {
         setTimeout(() => {
           link.classList.add('show')
         }, delay * (index + 1));
       });
-    }else{
-      const links = document.querySelectorAll('.mobile-link')
+    } else {
+      const links = document.querySelectorAll('.mobile-link');
       links.forEach(link => {
         link.classList.remove('show')
       });
     }
-  }
+  };
+
+  const handleClickOutside = (event) => {
+    const nav = document.querySelector('nav');
+    if (nav && !nav.contains(event.target)) {
+      ShowMobileMenu.value = false;
+      ShowUserMenu.value = false;
+    }
+  };
 
   onMounted(() => {
     if(!ShowMobileMenu.value) {
@@ -34,10 +42,16 @@
     }
   })
 
+  onBeforeUnmount(() => {
+    // Eliminar el listener cuando el componente se desmonta
+    document.removeEventListener('click', handleClickOutside);
+  });
+
+
 </script>
 
 <template>
-  <nav class="fixed top-0 left-0 right-0 z-50 bg-white shadow-lg">
+  <nav class="fixed top-0 left-0 right-0 z-50 bg-white shadow-lg" >
     <div class="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
       <div class="relative flex h-16 items-center justify-between">
         <div class="absolute inset-y-0 left-0 flex items-center sm:hidden">

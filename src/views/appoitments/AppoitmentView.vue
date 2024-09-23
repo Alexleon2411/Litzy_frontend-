@@ -34,6 +34,7 @@
 
     const editService = () => {
       showServices.value = true;
+      showDate.value = false;
     };
 
     const deleteService = (service) => {
@@ -155,7 +156,7 @@
     <!-- user details  -->
     <div class="w-full my-10" v-if="userDetails">
       <button class="bg-pink-500 hover:bg-pink-700 text-white p-2 rounded-lg justify-end">Iniciar sesion</button>
-    <form @submit.prevent="" class="w-3/5  mx-auto  bg-white p-5 rounded-lg">
+    <form @submit.prevent="" class="mt-3 lg:w-3/5  mx-auto  bg-white p-5 rounded-lg">
       <!-- Title -->
       <div class="mb-4">
         <label for="title" class="block text-sm font-medium text-blue-900">Title</label>
