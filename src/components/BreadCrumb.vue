@@ -25,6 +25,10 @@
     if (path.includes('admin')) {
       return '/admin/panel-services'; // Redirige a panel-services
     }
+
+    if (path.includes('reservaciones')) {
+      return '/reservaciones/nueva'
+    }
     return path; // Si no, devuelve el path original
   }
 

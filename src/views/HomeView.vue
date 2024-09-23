@@ -8,15 +8,7 @@ import Footer from '../components/Footer.vue'
 </script>
 
 <template>
-  <!-- <div class=" flex justify-center">
-    <div class="flex justify-between h-1/5 w-20 items-center">
-      <span class="mdi mdi-facebook"></span>
-      <span class="mdi mdi-instagram"></span>
-      <span class="mdi mdi-whatsapp"></span>
-    </div>
-  </div> -->
   <Banner/>
-
   <div class=" w-11/12 lg:w-3/5 w-1/2 justify-start flex mx-auto py-20">
     <div class="justify-center inner">
       <h1 class="text-blue-900 z-auto">Bienvenidos a estetica Litzy</h1>
@@ -24,9 +16,7 @@ import Footer from '../components/Footer.vue'
         La estetica Litzy está encantada de darle la bienvenida a su centro en Sato Domingo en la Zona oeste,
         nuestro objetivo es ofrecerle una atención personalizada que se adapte perfectamente a sus necesidades y espectativas
       </p>
-      <button type="button" class="local-button">
-        <RouterLink>Nuestra Estetica</RouterLink>
-      </button>
+        <RouterLink class="local-button">Nuestra Estetica</RouterLink>
     </div>
   </div>
   <Services/>

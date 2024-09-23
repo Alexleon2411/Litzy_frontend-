@@ -54,6 +54,7 @@ const router = createRouter({
       children: [
         {
           path: 'nueva',
+          name: 'nueva',
           component: () => import('@/views/appoitments/NewAppoitment.vue'),
           children: [
             {
