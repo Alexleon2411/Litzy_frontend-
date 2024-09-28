@@ -1,6 +1,5 @@
-
     <script setup>
-    import { ref, computed, reactive } from 'vue';
+    import { ref, computed } from 'vue';
     import { useAppoitmentStore } from '@/stores/apppoitment';
     import VueTailwindDatepicker from 'vue-tailwind-datepicker'
 
@@ -14,24 +13,10 @@
         month: 'MMM'
       })
 
-      const user = reactive({
-        title: '',
-        firstName: '',
-        lastName: '',
-        phone: '',
-        email: '',
-      })
-
       const disableDate = (date) => {
         const today = new Date()
         return date < today || date.getMonth() > today.getMonth() + 2 || [0].includes(date.getDay())
       }
-    const appointment = ref({
-      time: '10:00 AM',
-      date: '2024-09-25',
-
-    });
-
     const editService = () => {
       showServices.value = true;
       showDate.value = false;
@@ -98,18 +83,18 @@
       </div>
       <!-- Buttons to Add or Save Changes -->
       <div class="mt-4 flex justify-end space-x-2">
+        <RouterLink
+        :to="{name: 'new-appoitment'}"
+        class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+        >
+        Añadir más Servicios
+        </RouterLink>
         <button
           @click="saveChanges"
           class="px-4 py-2 bg-pink-500 text-white rounded hover:bg-pink-600"
         >
           Seleccionar Fecha
         </button>
-        <RouterLink
-          :to="{name: 'new-appoitment'}"
-          class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
-        >
-          Añadir Servicio
-        </RouterLink>
       </div>
     </div>
     <!-- calendario y hora -->
@@ -155,36 +140,38 @@
     </div>
     <!-- user details  -->
     <div class="w-full my-10" v-if="userDetails">
-      <button class="bg-pink-500 hover:bg-pink-700 text-white p-2 rounded-lg justify-end">Iniciar sesion</button>
     <form @submit.prevent="" class="mt-3 lg:w-3/5  mx-auto  bg-white p-5 rounded-lg">
       <!-- Title -->
+      <!-- <button class="bg-pink-500 hover:bg-pink-700 text-white p-2 rounded-lg mb-4">Iniciar sesion</button> -->
+      <p class="mb-3"><RouterLink :to="{name: 'login'}">Registrar/Iniciar sesion</RouterLink> o llena el formulario</p>
       <div class="mb-4">
         <label for="title" class="block text-sm font-medium text-blue-900">Title</label>
-        <select v-model="user.title" id="title" class="mt-1 block w-full py-2 px-3 border border-pink-500 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+        <select v-model="store.user.title" id="title" class="mt-1 block w-full py-2 px-3 border border-pink-500 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
           <option value="">Select...</option>
-          <option value="Mr.">Mr.</option>
-          <option value="Mrs.">Mrs.</option>
-          <option value="Ms.">Ms.</option>
+          <option value="Mr.">Sr.</option>
+          <option value="Mrs.">Sra.</option>
+          <option value="Ms.">Srta.</option>
+          <option value="Ms.">Otros.</option>
         </select>
       </div>
 
       <!-- Full Name -->
       <div class="mb-4">
         <label for="firstName" class="block text-sm font-medium text-blue-900">First Name</label>
-        <input v-model="user.firstName" type="text" id="firstName" class="mt-1 block w-full py-2 px-3 border border-pink-500 rounded-md shadow-sm focus:outline-none focus:ring-pink-500 focus:border-indigo-500 sm:text-sm" required>
+        <input v-model="store.user.firstName" type="text" id="firstName" class="mt-1 block w-full py-2 px-3 border border-pink-500 rounded-md shadow-sm focus:outline-none focus:ring-pink-500 focus:border-indigo-500 sm:text-sm" required>
       </div>
 
       <div class="mb-4">
         <label for="lastName" class="block text-sm font-medium text-blue-900">Last Name</label>
-        <input v-model="user.lastName" type="text" id="lastName" class="mt-1 block w-full py-2 px-3 border border-pink-500 rounded-md shadow-sm focus:outline-none focus:ring-pink-500 focus:border-indigo-500 sm:text-sm" required>
+        <input v-model="store.user.lastName" type="text" id="lastName" class="mt-1 block w-full py-2 px-3 border border-pink-500 rounded-md shadow-sm focus:outline-none focus:ring-pink-500 focus:border-indigo-500 sm:text-sm" required>
       </div>
       <div class="mb-4">
-        <label for="lastName" class="block text-sm font-medium text-blue-900">Last Name</label>
-        <input v-model="user.phone" type="text" id="lastName" class="mt-1 block w-full py-2 px-3 border border-pink-500 rounded-md shadow-sm focus:outline-none focus:ring-pink-500 focus:border-indigo-500 sm:text-sm" required>
+        <label for="tlf" class="block text-sm font-medium text-blue-900">Telefono</label>
+        <input v-model="store.user.phone" type="text" id="tlf" class="mt-1 block w-full py-2 px-3 border border-pink-500 rounded-md shadow-sm focus:outline-none focus:ring-pink-500 focus:border-indigo-500 sm:text-sm" required>
       </div>
       <div class="mb-4">
-        <label for="lastName" class="block text-sm font-medium text-blue-900">Last Name</label>
-        <input v-model="user.email" type="text" id="lastName" class="mt-1 block w-full py-2 px-3 border border-pink-500 rounded-md shadow-sm focus:outline-none focus:ring-pink-500 focus:border-indigo-500 sm:text-sm" required>
+        <label for="email" class="block text-sm font-medium text-blue-900">Email</label>
+        <input v-model="store.user.email" type="text" id="email" class="mt-1 block w-full py-2 px-3 border border-pink-500 rounded-md shadow-sm focus:outline-none focus:ring-pink-500 focus:border-indigo-500 sm:text-sm" required>
       </div>
       <!-- Submit Button -->
       <div >

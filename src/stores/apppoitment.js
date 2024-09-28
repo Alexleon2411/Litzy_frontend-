@@ -1,5 +1,5 @@
  import { defineStore } from "pinia";
- import { ref, computed, onMounted  } from "vue";
+ import { ref, computed, onMounted, reactive  } from "vue";
  import { useRouter } from "vue-router";
 
  export const useAppoitmentStore =  defineStore('appoitments', () => {
@@ -16,7 +16,13 @@
         hours.value.push(hour + ':00')
       }
     })
-
+    const user = reactive({
+      title: '',
+      firstName: '',
+      lastName: '',
+      phone: '',
+      email: '',
+    })
     function onServiceSelected (servicio) {
       if (services.value.some(selectService => selectService._id === servicio._id)) {
         alert('ya este esrvicio ha sido añadido');
@@ -66,6 +72,7 @@
       date,
       hours,
       time,
+      user,
       deleteService,
       onServiceSelected,
       createAppoitment,

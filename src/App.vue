@@ -4,15 +4,25 @@ import { useRoute } from 'vue-router';
 import Footer from '@/components/Footer.vue'
 import NavBar from '@/components/NavBar.vue'
 import BreadCrumb from './components/BreadCrumb.vue';
+import { ref, computed } from 'vue';
 
 const route = useRoute();
+
+const showBreadCrumb = computed(()=> {
+  if (route.path === '/' || route.path === '/login') {
+    return false;
+  }else {
+    return true
+  }
+})
+
 </script>
 
 <template>
   <div class="bg-pink-50 h-full">
     <NavBar/>
     <div class="pt-16 min-h-screen">
-      <BreadCrumb v-if="route.path !== '/'"/>
+      <BreadCrumb v-if="showBreadCrumb"/>
       <RouterView/>
     </div>
     <Footer />
