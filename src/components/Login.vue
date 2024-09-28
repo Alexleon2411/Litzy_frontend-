@@ -178,6 +178,20 @@ button:hover {
   margin: auto;
   margin-top: 5%;
 }
+@media (max-width: 760px) {
+  .container{
+    width: 100%;
+    display: block;
+  }
+  .social {
+    font-size: 15px;
+    margin: 5px;
+    padding: 2px 10px;
+  }
+  .form-container button {
+  margin-top: 10px;
+}
+}
 .form-container {
   position: absolute;
   display: flex;
