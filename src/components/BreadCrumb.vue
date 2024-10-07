@@ -1,17 +1,21 @@
 <script setup>
   import { computed } from 'vue';
   import { useRoute } from 'vue-router';
+  import { useUserStore } from '@/stores/user';
 
   const route = useRoute();
+  const userStore = useUserStore()
 
   const breadcrumbs = computed(() => {
     const pathArray = route.path.split('/').filter((path) => path);
     const breadcrumbPaths = [{name: 'Home', path: '/'}]
      pathArray.forEach((path, index) => {
-      breadcrumbPaths.push({
-        name: formatBreadCrumbName(path),
-        path: `/${pathArray.slice(0, index + 1).join('/')}`,
-      })
+        breadcrumbPaths.push({
+          name: formatBreadCrumbName(path),
+
+            path: `/${pathArray.slice(0, index + 1).join('/')}`,
+
+        })
     })
     return breadcrumbPaths;
   })
@@ -25,9 +29,12 @@
     if (path.includes('admin')) {
       return '/admin/panel-services'; // Redirige a panel-services
     }
+    if(path.includes('auth')){
+      return '/auth/login';
+    }
 
     if (path.includes('reservaciones')) {
-      return '/reservaciones/nueva'
+      return '/reservaciones'
     }
     return path; // Si no, devuelve el path original
   }
@@ -48,6 +55,8 @@
         return 'Nuestra Sección de antes y despues ';
       case 'creaServicio':
         return 'Crear un nuevo servicio';
+      case 'reservaciones/miReservacion':
+        return `Bienvenid@ ${userStore.getUserName}`
       default:
         return 'Litzy Estética';
     }

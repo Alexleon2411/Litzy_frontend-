@@ -11,6 +11,9 @@ const route = useRoute();
 const showBreadCrumb = computed(()=> {
   if (route.path === '/' || route.path === '/login') {
     return false;
+  }
+  else if (window.innerWidth < 760) {
+    return false;
   }else {
     return true
   }

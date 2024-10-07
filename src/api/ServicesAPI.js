@@ -4,6 +4,9 @@ export default {
    all() {
     return api.get('/services')
    },
+   filteredServices(category){
+      return api.get(`/services/filtered?category=${category}`)
+   },
    getOne(id) {
     return api.get(`/services/${id}`)
    },

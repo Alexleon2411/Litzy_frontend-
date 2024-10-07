@@ -1,9 +1,13 @@
     <script setup>
     import { ref, computed } from 'vue';
     import { useAppoitmentStore } from '@/stores/apppoitment';
+    import { useUserStore } from '@/stores/user';
     import VueTailwindDatepicker from 'vue-tailwind-datepicker'
+    import { useRouter } from 'vue-router';
 
       const store = useAppoitmentStore();
+      const userStore = useUserStore();
+      const router = useRouter()
       const services = computed(() => store.services)
       const showServices = ref(true)
       const showDate = ref(false)
@@ -37,11 +41,22 @@
       }
     };
 
+    const userInfo = () => {
+      console.log( userStore.user)
+      // en la siguiente funcion se verfica que el objeto no este vacio
+      if (Object.keys(userStore.user).length > 0){
+        store.createAppoitment();
+      } else {
+        showDate.value = false
+        userDetails.value = true
+      }
+    }
+
     const createAppoitment = () => {
-      store.createAppoitment
-      showDate.value = false
-      userDetails.value = true
+      store.createAppoitment();
     };
+
+
 
     </script>
 
@@ -118,13 +133,14 @@
           />
         </div>
         <!-- div de las horas  -->
-        <div class="flex-1 grid grid-cols-1 xl:grid-cols-2 gap-5 mt-10 lg:mt-0">
+        <div v-if="store.isDateSelected" class="flex-1 grid grid-cols-1 xl:grid-cols-2 gap-5 mt-10 lg:mt-0">
           <button
-          v-for="hour in store.hours"
-          class="block text-white rounded-lg text-xl p-3"
-          :class="store.time === hour ? 'bg-blue-700 text-white' : 'bg-pink-500 '"
-          @click="store.time = hour"
-        >
+            v-for="hour in store.hours"
+            class="block text-white rounded-lg text-xl p-3 disabled:opacity-10"
+            :class="store.time === hour ? 'bg-blue-700 text-white' : 'bg-pink-500 '"
+            @click="store.time = hour"
+            :disabled="store.disableTime(hour) ? true : false || store.disablePreviousTime(hour) ? true : false"
+          >
             {{ hour }}
         </button>
         </div>
@@ -135,35 +151,19 @@
 
       <!-- boton de submit  -->
       <div v-if="store.isValidReservation" class="flex justify-end ">
-        <button class="bg-blue-600 p-2 rounded-lg text-white" @click="createAppoitment">Confirmar Cita</button>
+        <button class="bg-blue-600 p-2 rounded-lg text-white" @click="userInfo">Confirmar Cita</button>
       </div>
     </div>
     <!-- user details  -->
     <div class="w-full my-10" v-if="userDetails">
-    <form @submit.prevent="" class="mt-3 lg:w-3/5  mx-auto  bg-white p-5 rounded-lg">
+    <form @submit.prevent="createAppoitment" class="mt-3 lg:w-3/5  mx-auto  bg-white p-5 rounded-lg">
       <!-- Title -->
       <!-- <button class="bg-pink-500 hover:bg-pink-700 text-white p-2 rounded-lg mb-4">Iniciar sesion</button> -->
       <p class="mb-3"><RouterLink :to="{name: 'login'}">Registrar/Iniciar sesion</RouterLink> o llena el formulario</p>
-      <div class="mb-4">
-        <label for="title" class="block text-sm font-medium text-blue-900">Title</label>
-        <select v-model="store.user.title" id="title" class="mt-1 block w-full py-2 px-3 border border-pink-500 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-          <option value="">Select...</option>
-          <option value="Mr.">Sr.</option>
-          <option value="Mrs.">Sra.</option>
-          <option value="Ms.">Srta.</option>
-          <option value="Ms.">Otros.</option>
-        </select>
-      </div>
-
       <!-- Full Name -->
       <div class="mb-4">
-        <label for="firstName" class="block text-sm font-medium text-blue-900">First Name</label>
-        <input v-model="store.user.firstName" type="text" id="firstName" class="mt-1 block w-full py-2 px-3 border border-pink-500 rounded-md shadow-sm focus:outline-none focus:ring-pink-500 focus:border-indigo-500 sm:text-sm" required>
-      </div>
-
-      <div class="mb-4">
-        <label for="lastName" class="block text-sm font-medium text-blue-900">Last Name</label>
-        <input v-model="store.user.lastName" type="text" id="lastName" class="mt-1 block w-full py-2 px-3 border border-pink-500 rounded-md shadow-sm focus:outline-none focus:ring-pink-500 focus:border-indigo-500 sm:text-sm" required>
+        <label for="firstName" class="block text-sm font-medium text-blue-900"> Name</label>
+        <input v-model="store.user.name" type="text" id="firstName" class="mt-1 block w-full py-2 px-3 border border-pink-500 rounded-md shadow-sm focus:outline-none focus:ring-pink-500 focus:border-indigo-500 sm:text-sm" required>
       </div>
       <div class="mb-4">
         <label for="tlf" class="block text-sm font-medium text-blue-900">Telefono</label>

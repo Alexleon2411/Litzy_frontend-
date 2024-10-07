@@ -1,28 +1,50 @@
  import { defineStore } from "pinia";
- import { ref, computed, onMounted, reactive  } from "vue";
+ import { ref, computed, onMounted, reactive, watch  } from "vue";
  import { useRouter } from "vue-router";
+ import AppoitmentApi from "@/api/AppoitmentApi";
+ import { inject } from "vue";
+ import { converToISO, convertToDDMMYYYY } from "@/helpers/date";
 
  export const useAppoitmentStore =  defineStore('appoitments', () => {
+
     const router = useRouter()
+    const appoitmentId = ref('')
+    const toast = inject('toast')
     const services = ref([])
     const date = ref('')
     const hours = ref([])
     const time = ref('')
+    const user = ref({
+      name: '',
+      phone: '',
+      email: '',
+    })
+    const appoitmentsByDate = ref([])
 
     onMounted(() => {
       const startHour = 9;
       const endHour = 18;
       for(let hour = startHour; hour <= endHour; hour++){
-        hours.value.push(hour + ':00')
+        hours.value.push(hour.toString().padStart(2, '0') + ':00');
       }
     })
-    const user = reactive({
-      title: '',
-      firstName: '',
-      lastName: '',
-      phone: '',
-      email: '',
+
+    watch(date, async () => {
+      time.value = '';
+      if(date.value === '') return;
+      const { data } = await AppoitmentApi.getByDate(date.value)
+      if(appoitmentId.value){
+        console.log('editando')
+        // para editar tomamos las citas que no son igaules a las que ya estamos editando
+        appoitmentsByDate.value = data.filter( appoitment => appoitment._id !== appoitmentId.value)
+        time.value = data.filter( appoitment => appoitment._id === appoitmentId.value)[0].time
+
+      }else{
+        console.log('registro nuevo ')
+        appoitmentsByDate.value = data ;
+      }
     })
+
     function onServiceSelected (servicio) {
       if (services.value.some(selectService => selectService._id === servicio._id)) {
         alert('ya este esrvicio ha sido añadido');
@@ -37,14 +59,26 @@
       }
     }
 
-    function createAppoitment() {
+    async function createAppoitment() {
       const appoitment = {
         services: services.value.map(service => service._id),
-        date: date.value,
+        date: converToISO(date.value),
         time: time.value,
         totalAmount: totalAmount.value
       }
-      console.log(appoitment)
+      const { data } = await AppoitmentApi.create(appoitment)
+      toast.open({
+        message: data.msg,
+        type: 'success'
+      })
+      clearAppoitmentData()
+      router.push({name: 'my-appoitments'})
+    }
+
+    function clearAppoitmentData() {
+       services.value = []
+       date.value = ''
+       time.value = ''
     }
 
     function deleteService(service) {
@@ -53,6 +87,22 @@
       // Asigna el nuevo array al ref
       services.value = [...updatedServices]; // Spread para forzar la reactividad
       console.log(services.value);
+    }
+
+    async function getAppoitmentsById(id) {
+      const { data } = await AppoitmentApi.getById(id)
+      services.value = data.services
+      date.value = data.date
+      time.value = data.time
+    }
+
+    function setSelectedAppoitment(data){
+      services.value = data.services
+      date.value = convertToDDMMYYYY(data.date)
+      time.value = data.time
+      appoitmentId.value = data._id
+
+      console.log(appoitmentId.value)
     }
     const isServiceSelected = computed(() => {
       return (id) => services.value.some(servicio._id === id)
@@ -66,6 +116,43 @@
       return services.value.length && date.value.length && time.value.length
     })
 
+    const isDateSelected = computed(() => {
+      return date.value ? true : false
+    })
+
+
+    const disablePreviousTime = computed(() => {
+      return(hour) => {
+        const currentDateTime = new Date();
+
+        const day = String(currentDateTime.getDate()).padStart(2, '0'); // Día con dos dígitos
+        const month = String(currentDateTime.getMonth() + 1).padStart(2, '0'); // Mes con dos dígitos (getMonth() retorna de 0-11)
+        const year = currentDateTime.getFullYear(); // Año con 4 dígitos
+        // Formatear la fecha actual en "dd/mm/yyyy"
+        const today = `${day}/${month}/${year}`;
+        const hours = String(currentDateTime.getHours()).padStart(2, '0'); // Asegurar que tenga 2 dígitos
+        const minutes = String(currentDateTime.getMinutes()).padStart(2, '0');
+        const currentTime = `${hours}:${minutes}`;
+        let disabled;
+        if(today === date.value){
+          disabled = currentTime > hour;
+        }else{
+          disabled = false;
+        }
+        return disabled;
+      }
+
+    })
+    const disableTime = computed(() => {
+      return (hour) => {
+        // Deshabilitar si la cita ya está ocupada
+        const isTaken = appoitmentsByDate.value.find(appoitment => appoitment.time === hour);
+        // Retornar verdadero si ya está ocupada la hora o si es una hora pasada/proxima
+        return isTaken ;
+      };
+    });
+
+
     return {
       totalAmount,
       services,
@@ -73,11 +160,17 @@
       hours,
       time,
       user,
+      appoitmentsByDate,
       deleteService,
       onServiceSelected,
       createAppoitment,
+      getAppoitmentsById,
+      setSelectedAppoitment,
       isServiceSelected,
       noServicesSelected,
       isValidReservation,
+      isDateSelected,
+      disableTime,
+      disablePreviousTime
     }
  })

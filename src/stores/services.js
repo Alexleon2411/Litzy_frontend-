@@ -10,6 +10,7 @@ export const useServicesStore = defineStore('services', () => {
   const storage = useFirebaseStorage()
 
   const services = ref([])
+  const filteredServices = ref([])
   const service = ref({})
   const router = useRouter()
 
@@ -17,6 +18,14 @@ export const useServicesStore = defineStore('services', () => {
     try {
       const { data } = await ServicesAPI.all() // de esta manera se llamara el api desde services api para asi tener un codigo un poco mas limpio, se le aplica destroctoring  para obtener solamente el valor y no la variable y su valor
       services.value = data
+    } catch (error) {
+      console.log(error)
+    }
+  }
+  async function getFilteredServices(category){
+    try {
+      const {data} = await ServicesAPI.filteredServices(category)
+      filteredServices.value = data;
     } catch (error) {
       console.log(error)
     }
@@ -67,11 +76,13 @@ export const useServicesStore = defineStore('services', () => {
 
   return {
     getAllServices,
+    getFilteredServices,
     createService,
     getOneService,
     updateService,
     deleteService,
     services,
+    filteredServices,
     service
   }
 })

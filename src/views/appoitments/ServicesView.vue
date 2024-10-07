@@ -27,17 +27,8 @@
         Selecciona el servicio que deseas
       </h2>
     </div>
-    <!-- <div class="flex flex-wrap content-start justify-center space-x-4 space-y-4 items-center p-5" >
-      <div class="shadow-lg ml-4 mt-4 h-40 w-56 rounded-lg col-start" v-for="service in services">
-        <a href="">
-          <img class="w-full h-2/4 object-cover" :src="service.image" alt="img-product">
-          <div class="p-2 grid grid-rows-3 container ">
-            <h2 class="text-2xl text-blue-900">{{service.name}}</h2>
-          </div>
-        </a>
-      </div>
-    </div> -->
-    <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4 items-center justify-items-center" v-if="!serviceDetail">
+
+    <div class="grid  sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4  items-center justify-items-center mt-3 "  v-if="!serviceDetail">
       <div class="shadow-lg h-40 w-52 rounded-lg flex items-center justify-center" v-for="service in services">
         <button class="h-full w-full" @click="handlerDetail(service)">
           <img class="w-full h-2/4 object-cover" :src="service.image" alt="img-product">

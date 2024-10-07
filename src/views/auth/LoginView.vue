@@ -37,6 +37,7 @@
           <span>O Utiliza tu cuenta de email para registrarte</span>
         </div>
         <div>
+          <input id="signinName" v-model="signupName" type="text" placeholder="Nombre" required />
           <input id="signinEmail" v-model="signupEmail" type="email" placeholder="Email" required />
           <input id="signinPassword" v-model="signupPassword" type="password" placeholder="Password" required />
         </div>
@@ -64,22 +65,67 @@
 
 <script setup>
 import { ref } from 'vue';
+import AuthAPI from '@/api/AuthAPI';
+import { inject } from 'vue';
+import { useRouter } from 'vue-router';
+import { useAppoitmentStore } from '@/stores/apppoitment';
+
+const toast = inject('toast')
+const router = useRouter();
+const appoitmentStore = useAppoitmentStore()
+
 
 // Reactive variables
 const email = ref('');
 const password = ref('');
+const signupName = ref('');
 const signupEmail = ref('');
 const signupPassword = ref('');
 
 // Functions to handle form submission
-const login = () => {
-  console.log('Logging in with', email.value, password.value);
-  // Add login logic here
-};
+const login = async () => {
 
-const signup = () => {
-  console.log('Signing up with', signupEmail.value, signupPassword.value);
-  // Add signup logic here
+  const data = {
+    email: email.value,
+    password: password.value
+  }
+  try {
+    const {data: { token } } = await AuthAPI.login(data)
+    localStorage.setItem('AUTH_TOKEN', token)
+    console.log(appoitmentStore.services)
+    router.push({name: 'my-appoitments'})
+  } catch (error) {
+    console.log(error)
+    toast.open({
+      message: error.response.data.msg,
+      type: 'error'
+    })
+  }
+};
+const resetData = () => {
+  signupName.value = ''
+  signupEmail.value = ''
+   signupPassword.value = ''
+}
+
+const signup = async  () => {
+  const data = {
+    name: signupName.value,
+    email: signupEmail.value,
+    password: signupPassword.value
+  }
+  try {
+    const result = await AuthAPI.register(data)
+    toast.open({
+      message: result.data.msg
+    })
+    resetData()
+  } catch (error) {
+    toast.open({
+      message: error.response.data.msg,
+      type: 'error'
+    })
+  }
 };
 
 // Function to toggle between Sign In and Sign Up
