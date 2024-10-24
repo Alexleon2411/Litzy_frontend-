@@ -12,5 +12,8 @@ export default {
   },
   auth(){
     return api.get('/auth/user')
+  },
+  forgorPassword(data){
+    return api.post('/auth/forgot-password', data)
   }
 }

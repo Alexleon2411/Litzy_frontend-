@@ -4,6 +4,7 @@
  import AppoitmentApi from "@/api/AppoitmentApi";
  import { inject } from "vue";
  import { converToISO, convertToDDMMYYYY } from "@/helpers/date";
+ import { useUserStore } from "./user";
 
  export const useAppoitmentStore =  defineStore('appoitments', () => {
 
@@ -20,6 +21,7 @@
       email: '',
     })
     const appoitmentsByDate = ref([])
+    const userStore = useUserStore()
 
     onMounted(() => {
       const startHour = 9;
@@ -47,7 +49,7 @@
 
     function onServiceSelected (servicio) {
       if (services.value.some(selectService => selectService._id === servicio._id)) {
-        alert('ya este esrvicio ha sido añadido');
+        alert('ya este servicio ha sido añadido');
       }else {
         if(services.value.length === 3) {
           alert('Maximo 3 servicios por cita');
@@ -76,9 +78,58 @@
     }
 
     function clearAppoitmentData() {
-       services.value = []
-       date.value = ''
-       time.value = ''
+      appoitmentId.value = ""
+      services.value = []
+      date.value = ''
+      time.value = ''
+    }
+
+    async function getAllAppoitments() {
+      const user = userStore.user
+      if (user.admin){
+        try {
+          const result = await AppoitmentApi.getAll()
+          console.log(result)
+          return result
+        } catch (error) {
+          console.log(error)
+        }
+      }
+    }
+
+    async function updateAppoitment() {
+      const appoitment = {
+        services: services.value.map(service => service._id),
+        date: converToISO(date.value),
+        time: time.value,
+        totalAmount: totalAmount.value
+      }
+      const { data } = await AppoitmentApi.update(appoitmentId.value, appoitment)
+      toast.open({
+        message: data.msg,
+        type: 'success'
+      })
+      clearAppoitmentData()
+      router.push({name: 'my-appoitments'})
+    }
+
+    async function cancelAppoitment(id){
+      if(confirm('¿Deseas cancelar esta cita?')){
+
+        try {
+          const { data } = await AppoitmentApi.delete(id)
+          toast.open({
+            message: data.msg,
+            type: 'success'
+          })
+          userStore.getUserAppoitments()
+        } catch (error) {
+          toast.open({
+            message: error,
+            type: 'error'
+          })
+        }
+      }
     }
 
     function deleteService(service) {
@@ -134,6 +185,7 @@
         const minutes = String(currentDateTime.getMinutes()).padStart(2, '0');
         const currentTime = `${hours}:${minutes}`;
         let disabled;
+        console.log(currentTime > hour)
         if(today === date.value){
           disabled = currentTime > hour;
         }else{
@@ -165,7 +217,11 @@
       onServiceSelected,
       createAppoitment,
       getAppoitmentsById,
+      getAllAppoitments,
       setSelectedAppoitment,
+      updateAppoitment,
+      clearAppoitmentData,
+      cancelAppoitment,
       isServiceSelected,
       noServicesSelected,
       isValidReservation,

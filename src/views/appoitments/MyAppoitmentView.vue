@@ -21,11 +21,20 @@
 
 
 <template>
+  
   <div class=" mx-auto bg-white  w-11/12 md:w-3/5 lg:w-3/5 p-3 mt-4 rounded-lg">
     <h1 class="text-blue-800">Bienvenid@ <span >{{ user.getUserName.toUpperCase() }}</span></h1>
     <div>
-      <div>
-        <span class="text-blue-800 ml-3" v-if="apppoitmentStore.services.length === 0">Tus  proximas citas disponibles: </span>
+      <div v-if="user.userAppoitments.length !== 0">
+        <span class="text-blue-800 ml-3" >Tus  proximas citas disponibles: </span>
+      </div>
+      <div v-else class="mx-auto mt-10 max-w-2xl lg:mx-0 lg:max-w-none ">
+        <div class="mb-3">
+          <span class="text-blue-800 ml-3" >No tienes nigunna proxima cita disponible </span>
+        </div>
+        <RouterLink :to="{name: 'new-appoitment'}" class="appoitment-button">
+          Crear Cita
+        </RouterLink>
       </div>
       <!-- citas disponibles -->
       <div v-if="apppoitmentStore.services.length === 0" v-for="(appoitment, index) in user.userAppoitments" :key="index" class="bg-pink-200 my-3 mx-3 p-3 rounded-lg text-white " style="background: linear-gradient(90deg,rgba(43,34,126,0.9878545168067226) 0%,  rgba(255,0,175,1) 100%);">
@@ -38,7 +47,7 @@
         <p class="text-right">Total a pagar: ${{ appoitment.totalAmount }}</p>
         <div class="flex gap-2 items-center mt-3 ">
           <RouterLink :to="{name: 'edit-appoitment', params: {id: appoitment._id}}" class="bg-pink-500 rounded-lg p-2 text-white text-sm font-black flex-1 md:flex-none">Editar cita</RouterLink>
-          <button class="bg-red-700 rounded-lg p-2 text-white text-sm font-black flex-1 md:flex-none">Cancelar cita</button>
+          <button class="bg-red-700 rounded-lg p-2 text-white text-sm font-black flex-1 md:flex-none" @click="apppoitmentStore.cancelAppoitment(appoitment._id)">Cancelar cita</button>
         </div>
       </div>
       <!-- confirmar la cita si se inicio sesion al momento de crear una cita  -->
@@ -61,5 +70,37 @@
     background-clip: text;
     color: transparent; /* Asegura que solo el fondo sea visible */
   }
+  .appoitment-button{
+    display: inline-block;
+    vertical-align: middle;
+    width: auto;
+    min-width: 9rem;
+    margin: 0;
+    padding: .6875rem 1.375rem .5625rem;
+    font-family: Inter, Arial, Verdana, Geneva, Helvetica, 'Liberation Sans', FreeSans, sans-serif;
+    font-weight: 500;
+    font-size: .8125rem;
+    line-height: 1.7692307692;
+    color: #343434;
+    text-align: center;
+    text-transform: uppercase;
+    text-decoration: none;
+    border: .0625rem solid #ea75c5;
+    background: #fff linear-gradient(to left, #fff 50%, #d78fca 50%);
+    background-size: 200% 100%;
+    background-position: right;
+    background-origin: border-box;
+    transition: color .4s cubic-bezier(.39,.575,.28,.995),
+                border-color .5s cubic-bezier(.39,.575,.28,.995),
+                background-position .5s cubic-bezier(.39,.575,.28,.995),
+                opacity .5s cubic-bezier(.39,.575,.28,.995);
+    cursor: pointer;
+    white-space: nowrap;
+  }
 
+  .appoitment-button:hover {
+      color: #fff;
+      background-position: left;
+      border-color: #d96ddd;
+  }
 </style>

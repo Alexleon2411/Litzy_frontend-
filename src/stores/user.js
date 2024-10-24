@@ -43,6 +43,16 @@ export const  useUserStore = defineStore('user', () => {
     router.push({name: 'login'})
   }
 
+  function forgottenPassword(email) {
+    console.log(email)
+    try {
+      const result = AuthAPI.forgorPassword(email)
+      return result
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   const getUserName = computed(() => user.value?.name ? user.value?.name : '')
 
   return {
@@ -51,6 +61,7 @@ export const  useUserStore = defineStore('user', () => {
     userAppoitments,
     logout,
     getUser,
-    getUserAppoitments
+    getUserAppoitments,
+    forgottenPassword
   }
 })

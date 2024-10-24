@@ -1,7 +1,7 @@
 <template>
   <div class="container" id="container">
     <!-- Sección de Sign In -->
-    <div class="form-container sign-in">
+    <div class="form-container sign-in" v-if="!showForgotPassword">
       <form @submit.prevent="login">
         <h1>Iniciar Sesion</h1>
         <div class="social-container">
@@ -17,12 +17,22 @@
           <input id="password" v-model="password" type="password" placeholder="Password" required />
         </div>
         <div>
-          <a href="#">Olvido la contraseña ?</a>
+          <button class="text-blue-400" @click="showForgotPassword = true;">Olvido la contraseña ?</button>
         </div>
-        <button type="submit"  >Iniciar Sesion</button>
+        <button type="submit" class="iniciar-sesion" >Iniciar Sesion</button>
       </form>
     </div>
+    <div v-if="showForgotPassword" class="form-container sign-in">
+      <form @submit.prevent="fortgotPassword">
+        <h1>Olvido la Contraseña</h1>
+        <div>
+          <input id="email" v-model="email" type="email" placeholder="Introduce tu Email" required />
+        </div>
+        <button type="submit" class="bg-pink-700 text-white p-1 rounded-lg mr-1">Recuperar contraseña</button>
+        <button @click="showForgotPassword = false" class="bg-blue-800 text-white p-1 rounded-lg">cancel</button>
 
+      </form>
+    </div>
     <!-- Sección de Sign Up -->
     <div class="form-container sign-up">
       <form @submit.prevent="signup">
@@ -41,7 +51,7 @@
           <input id="signinEmail" v-model="signupEmail" type="email" placeholder="Email" required />
           <input id="signinPassword" v-model="signupPassword" type="password" placeholder="Password" required />
         </div>
-        <button type="submit" >Crear Cuenta</button>
+        <button type="submit" class="iniciar-sesion">Crear Cuenta</button>
       </form>
     </div>
 
@@ -51,12 +61,12 @@
         <div class="overlay-panel overlay-left">
           <h1>Bienvenid@ de vuelta!</h1>
           <p>Para saber mas sobre nuestro servicios, por favor Inicia sesion en nuestra pagina</p>
-          <button class=" mt-4" @click="toggleMode">Iniciar Sesion</button>
+          <button class=" mt-4 iniciar-sesion" @click="toggleMode">Iniciar Sesion</button>
         </div>
         <div class="overlay-panel overlay-right">
           <h1>Hola  <span class="ml-1">Amig@!</span></h1>
           <p>Crea una cuenta para disfrutar de mas servicios!</p>
-          <button  class="mt-4" @click="toggleMode">Crear Cuenta</button>
+          <button  class="mt-4 iniciar-sesion" @click="toggleMode">Crear Cuenta</button>
         </div>
       </div>
     </div>
@@ -69,11 +79,12 @@ import AuthAPI from '@/api/AuthAPI';
 import { inject } from 'vue';
 import { useRouter } from 'vue-router';
 import { useAppoitmentStore } from '@/stores/apppoitment';
+import { useUserStore } from '@/stores/user';
 
 const toast = inject('toast')
 const router = useRouter();
 const appoitmentStore = useAppoitmentStore()
-
+const userStore = useUserStore();
 
 // Reactive variables
 const email = ref('');
@@ -81,8 +92,11 @@ const password = ref('');
 const signupName = ref('');
 const signupEmail = ref('');
 const signupPassword = ref('');
+const showForgotPassword = ref(false);
 
 // Functions to handle form submission
+
+
 const login = async () => {
 
   const data = {
@@ -92,8 +106,12 @@ const login = async () => {
   try {
     const {data: { token } } = await AuthAPI.login(data)
     localStorage.setItem('AUTH_TOKEN', token)
-    console.log(appoitmentStore.services)
-    router.push({name: 'my-appoitments'})
+    await userStore.getUser() //se llama al usuario que se acaba de loguear para saber si es admin o no
+    if(userStore.user.admin){
+      router.push({name: 'adminProfile'})
+    }else{
+      router.push({name: 'my-appoitments'})
+    }
   } catch (error) {
     console.log(error)
     toast.open({
@@ -102,6 +120,24 @@ const login = async () => {
     })
   }
 };
+
+const fortgotPassword = async () => {
+  console.log('desde forgot password')
+  try {
+    const result = await userStore.forgottenPassword(email.value);
+    toast.open({
+        message: result.data.msg,
+        type: 'success'
+      })
+  } catch (error) {
+    console.log(error)
+    toast.open({
+        message: error.response.data.msg,
+        type: 'error'
+      })
+  }
+
+}
 const resetData = () => {
   signupName.value = ''
   signupEmail.value = ''
@@ -232,7 +268,7 @@ body {
 }
 
 
-button {
+.iniciar-sesion {
   border-radius: 10px;
   border: 1px solid #2eb2a7;
   background-color: #2eb2a7;
@@ -243,7 +279,7 @@ button {
   text-transform: uppercase;
   transition: transform 80ms ease-in;
 }
-button:hover {
+.iniciar-sesion:hover {
   background-color: #248d81;
 }
 

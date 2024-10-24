@@ -2,6 +2,7 @@
 <script setup>
   import { ref, onMounted, onBeforeUnmount, nextTick, computed} from 'vue'
   import { useUserStore } from '@/stores/user';
+  import { useAppoitmentStore } from '@/stores/apppoitment';
   import { useRouter } from 'vue-router';
 
   const ShowUserMenu = ref(false);
@@ -9,6 +10,7 @@
   const delay = 200;
   const userStore = useUserStore();
   const router = useRouter()
+  const appoitmentStore = useAppoitmentStore()
 
   const toggleMenu = async () => {
     ShowMobileMenu.value = !ShowMobileMenu.value;
@@ -28,6 +30,12 @@
       });
     }
   };
+
+  const cleanAppoitmentStoreData = () => {
+    appoitmentStore.clearAppoitmentData()
+    ShowMobileMenu.value = !ShowMobileMenu;
+    router.push({name: 'new-appoitment'})
+  }
 
   const handleClickOutside = (event) => {
     const nav = document.querySelector('nav');
@@ -97,15 +105,15 @@
           <div class="hidden sm:ml-6 sm:block">
             <div class="flex space-x-4">
               <!-- big screen/ pantalla grande-->
-                <RouterLink :to="{name: 'new-appoitment'}" class="rounded-md px-3 py-2  my-3 text-sm font-medium text-blue-900 hover:bg-blue-900 hover:text-white  ease-in duration 900">
+                <button @click="cleanAppoitmentStoreData" class="rounded-md px-3 py-2  my-3 text-sm font-medium text-blue-900 hover:bg-blue-900 hover:text-white  ease-in duration 900">
                   Servicios
-                </RouterLink>
+                </button>
                 <RouterLink :to="{name: 'contacto'}" class="rounded-md px-3 py-2 my-3 text-sm font-medium text-blue-900 hover:bg-blue-900 hover:text-white  ease-in duration 900">
                   Contacto
                 </RouterLink>
-                <RouterLink :to="{name: 'blog'}" class="rounded-md px-3 py-2 my-3 text-sm font-medium text-blue-900 hover:bg-blue-900 hover:text-white  ease-in duration 900">
+               <!--  <RouterLink :to="{name: 'blog'}" class="rounded-md px-3 py-2 my-3 text-sm font-medium text-blue-900 hover:bg-blue-900 hover:text-white  ease-in duration 900">
                   Blog
-                </RouterLink>
+                </RouterLink> -->
                 <RouterLink :to="{name: 'resultado'}" class="rounded-md px-3 py-2 my-3 text-sm font-medium text-blue-900 hover:bg-blue-900 hover:text-white  ease-in duration 900">
                   Resultados
                 </RouterLink>
@@ -128,7 +136,7 @@
             <div class="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none" role="menu" aria-orientation="vertical" aria-labelledby="user-menu-button" tabindex="-1" v-if="ShowUserMenu" @click.self="ShowUserMenu = false">
               <!-- Active: "bg-gray-100", Not Active: "" -->
                <div v-if="loginText === 'Cerrar Sesion'">
-                 <RouterLink :to="{name: 'my-appoitments'}" @click="handleClick" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="user-menu-item-0">your Profile</RouterLink>
+                 <RouterLink :to="userStore.user.admin ? {name: 'adminProfile'} : {name: 'my-appoitments'}" @click="handleClick" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="user-menu-item-0">your Profile</RouterLink>
                 <!-- <a href="#" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="user-menu-item-0">Your Profile</a> -->
                 <a href="#" @click="handleClick" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="user-menu-item-1">Settings</a>
                </div>
@@ -143,15 +151,15 @@
     <div class="sm:hidden" id="mobile-menu" v-if="ShowMobileMenu">
       <div class="space-y-1 px-2 pb-3 pt-2 ">
         <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
-        <RouterLink :to="{name: 'new-appoitment'}" @click="ShowMobileMenu = !ShowMobileMenu"  class="mobile-link block rounded-md px-3 py-2 text-base bg-pink-200 font-medium text-gray-600 hover:bg-pink-400 hover:text-white">
+        <RouterLink @click="cleanAppoitmentStoreData"  class="mobile-link block rounded-md px-3 py-2 text-base bg-pink-200 font-medium text-gray-600 hover:bg-pink-400 hover:text-white ">
           Servicios
         </RouterLink>
         <RouterLink :to="{name: 'contacto'}" @click="ShowMobileMenu = !ShowMobileMenu"  class="mobile-link block rounded-md px-3 py-2 text-base bg-pink-200 font-medium text-gray-600 hover:bg-pink-400 hover:text-white">
           Contacto
         </RouterLink>
-        <RouterLink :to="{name: 'blog'}" @click="ShowMobileMenu = !ShowMobileMenu" class="mobile-link block rounded-md px-3 py-2 text-base bg-pink-200 font-medium text-gray-600 hover:bg-pink-400 hover:text-white">
+       <!--  <RouterLink :to="{name: 'blog'}" @click="ShowMobileMenu = !ShowMobileMenu" class="mobile-link block rounded-md px-3 py-2 text-base bg-pink-200 font-medium text-gray-600 hover:bg-pink-400 hover:text-white">
           Blog
-        </RouterLink>
+        </RouterLink> -->
         <RouterLink :to="{name: 'resultado'}" @click="ShowMobileMenu = !ShowMobileMenu" class="mobile-link block rounded-md px-3 py-2 text-base bg-pink-200 font-medium text-gray-600 hover:bg-pink-400 hover:text-white">
           Resultados
         </RouterLink>

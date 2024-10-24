@@ -39,6 +39,9 @@ const editService = () => {
   showServices.value = true;
   showDate.value = false;
 };
+const clearEdit = () => {
+  store.clearAppoitmentData();
+}
 
 const deleteService = (service) => {
   alert('Servicio eliminado');
@@ -59,7 +62,7 @@ const userInfo = () => {
   console.log( userStore.user)
   // en la siguiente funcion se verfica que el objeto no este vacio
   if (Object.keys(userStore.user).length > 0){
-    store.createAppoitment();
+    store.updateAppoitment();
   } else {
     showDate.value = false
     userDetails.value = true
@@ -117,13 +120,14 @@ const createAppoitment = () => {
     class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
     >
     Añadir más Servicios
-    </RouterLink>
-    <button
-      @click="saveChanges"
-      class="px-4 py-2 bg-pink-500 text-white rounded hover:bg-pink-600"
-    >
-      Seleccionar Fecha
-    </button>
+  </RouterLink>
+  <button
+  @click="saveChanges"
+  class="px-4 py-2 bg-pink-500 text-white rounded hover:bg-pink-600"
+  >
+  Seleccionar Fecha
+</button>
+  <RouterLink :to="{name: 'my-appoitments'}"  @click="clearEdit" class="bg-white text-gray-400 px-4 py-2">Cancel </RouterLink>
   </div>
 </div>
 <!-- calendario y hora -->

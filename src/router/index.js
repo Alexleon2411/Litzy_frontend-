@@ -31,6 +31,11 @@ const router = createRouter({
           path: 'panel-services',
           name: 'panelServices',
           component: () => import('../views/admin/ServicesPanel.vue')
+        },
+        {
+          path: 'admin-profile',
+          name: 'adminProfile',
+          component: () => import('../views/admin/AdminProfile.vue')
         }
       ]
     },
@@ -91,11 +96,7 @@ const router = createRouter({
       name: 'auth',
       component: () => import('@/views/auth/AuthLayout.vue'),
       children: [
-        {
-          path: 'registro',
-          name: 'register',
-          component: () => import('@/views/auth/RegisterView.vue')
-        },
+        
         {
           path: 'confirmar-cuenta/:token',
           name: 'confirm-account',
@@ -105,6 +106,16 @@ const router = createRouter({
           path: 'login',
           name: 'login',
           component: () => import('@/views/auth/LoginView.vue')
+        },
+        {
+          path: 'olvide-password',
+          name: 'forgotPassword',
+          component: () => import('@/views/auth/ForgotPasswordView.vue')
+        },
+        {
+          path: 'olvide-password/:token',
+          name: 'new-password',
+          component: () => import('@/views/auth/NewPasswordView.vue')
         },
       ]
     },
