@@ -1,4 +1,5 @@
 import api from "@/lib/axios";
+import { updatePassword } from "firebase/auth";
 
 export default {
   register(data){
@@ -13,7 +14,19 @@ export default {
   auth(){
     return api.get('/auth/user')
   },
-  forgorPassword(data){
+  admin(){
+    return api.get('/auth/admin')
+  },
+  forgotPassword(data){
     return api.post('/auth/forgot-password', data)
+  },
+  verifyPasswordResetToken(token){
+    return api.get(`/auth/forgot-password/${token}`)
+  },
+  updatePassword(password, token){
+    return api.post(`/auth/forgot-password/${token}`, password)
+  },
+  getUserById(id){
+    return api.get(`/auth/admin/${id}`)
   }
 }

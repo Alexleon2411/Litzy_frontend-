@@ -16,10 +16,12 @@
             <span class="sr-only">Instagram</span>
             <i class="mdi mdi-instagram"></i>
           </a>
+          <!--
+            se va a dejar el siguiente enlace para usarse con tiktok si existe uno
           <a href="#" class="footer-social-icons" target="_blank">
             <span class="sr-only">Twitter</span>
             <i class="mdi mdi-twitter"></i>
-          </a>
+          </a> -->
 
           <a href="https://wa.me/32467705169" class="footer-social-icons" target="_blank">
             <span class="sr-only">Whatsapp</span>

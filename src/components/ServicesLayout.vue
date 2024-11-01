@@ -54,7 +54,7 @@
           </svg>
           <h3 class="title text-blue-900">Piel</h3>
           <div class="text text-blue-900">
-            La piel esun tema de consulta cada vez más frecuente. Nuestros tratamientos y servicios pueden ayudarte a mejorar tu aspecto
+            La piel es un tema de consulta cada vez más frecuente. Nuestros tratamientos y servicios pueden ayudarte a mejorar tu aspecto
           </div>
         </RouterLink>
       </div>

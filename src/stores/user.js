@@ -44,9 +44,8 @@ export const  useUserStore = defineStore('user', () => {
   }
 
   function forgottenPassword(email) {
-    console.log(email)
     try {
-      const result = AuthAPI.forgorPassword(email)
+      const result = AuthAPI.forgotPassword({email})
       return result
     } catch (error) {
       console.log(error)

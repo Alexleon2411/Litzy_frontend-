@@ -7,7 +7,7 @@
         <div class="social-container">
           <a href="#" class="social"><span class="mdi mdi-facebook"></span></a>
           <a href="#" class="social"><span class="mdi mdi-google"></span></a>
-          <a href="#" class="social"><span class="mdi mdi-linkedin"></span></a>
+          <a href="#" class="social"><span class="mdi mdi-instagram"></span></a>
         </div>
         <div class="sign-in-span">
           <span >O Utiliza tu cuenta de email</span>
@@ -30,7 +30,7 @@
         <div class="social-container">
           <a href="#" class="social"><span class="mdi mdi-facebook"></span></a>
           <a href="#" class="social"><span class="mdi mdi-google"></span></a>
-          <a href="#" class="social"><span class="mdi mdi-linkedin"></span></a>
+          <a href="#" class="social"><span class="mdi mdi-instragram"></span></a>
         </div>
         <div class="sign-in-span">
 

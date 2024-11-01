@@ -12,6 +12,9 @@ const showBreadCrumb = computed(()=> {
   if (route.path === '/' || route.path === '/login') {
     return false;
   }
+  else if (route.path.includes('auth/olvide-password')){
+    return false
+  }
   else if (window.innerWidth < 760) {
     return false;
   }else {

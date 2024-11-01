@@ -70,6 +70,7 @@
     if(loginText.value === 'Cerrar Sesion' ){
       console.log('cerrar sesion')
       userStore.logout();
+      router.push({name: 'login'})
     }else {
       router.push({name: 'login'})
       console.log('login ')

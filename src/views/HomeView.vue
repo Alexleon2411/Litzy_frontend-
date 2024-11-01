@@ -16,7 +16,6 @@ import Footer from '../components/Footer.vue'
         La estetica Litzy está encantada de darle la bienvenida a su centro en Sato Domingo en la Zona oeste,
         nuestro objetivo es ofrecerle una atención personalizada que se adapte perfectamente a sus necesidades y espectativas
       </p>
-        <RouterLink class="local-button">Nuestra Estetica</RouterLink>
     </div>
   </div>
   <Services/>

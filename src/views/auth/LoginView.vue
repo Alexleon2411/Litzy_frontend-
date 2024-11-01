@@ -7,7 +7,7 @@
         <div class="social-container">
           <a href="#" class="social"><span class="mdi mdi-facebook"></span></a>
           <a href="#" class="social"><span class="mdi mdi-google"></span></a>
-          <a href="#" class="social"><span class="mdi mdi-linkedin"></span></a>
+          <a href="#" class="social"><span class="mdi mdi-instagram"></span></a>
         </div>
         <div class="sign-in-span">
           <span >O Utiliza tu cuenta de email</span>
@@ -28,8 +28,8 @@
         <div>
           <input id="email" v-model="email" type="email" placeholder="Introduce tu Email" required />
         </div>
-        <button type="submit" class="bg-pink-700 text-white p-1 rounded-lg mr-1">Recuperar contraseña</button>
-        <button @click="showForgotPassword = false" class="bg-blue-800 text-white p-1 rounded-lg">cancel</button>
+        <button type="submit" class="bg-pink-700 text-white p-1 rounded-lg mr-1">Confirmar</button>
+        <button @click="showForgotPassword = false" class="bg-blue-800 text-white p-1 rounded-lg">cancelar</button>
 
       </form>
     </div>
@@ -40,7 +40,7 @@
         <div class="social-container">
           <a href="#" class="social"><span class="mdi mdi-facebook"></span></a>
           <a href="#" class="social"><span class="mdi mdi-google"></span></a>
-          <a href="#" class="social"><span class="mdi mdi-linkedin"></span></a>
+          <a href="#" class="social"><span class="mdi mdi-instagram"></span></a>
         </div>
         <div class="sign-in-span">
 
@@ -65,7 +65,7 @@
         </div>
         <div class="overlay-panel overlay-right">
           <h1>Hola  <span class="ml-1">Amig@!</span></h1>
-          <p>Crea una cuenta para disfrutar de mas servicios!</p>
+          <p>Sino tienes una cuenta con nostros, crea una para disfrutar  mas de nuestros servicios!</p>
           <button  class="mt-4 iniciar-sesion" @click="toggleMode">Crear Cuenta</button>
         </div>
       </div>
@@ -107,11 +107,12 @@ const login = async () => {
     const {data: { token } } = await AuthAPI.login(data)
     localStorage.setItem('AUTH_TOKEN', token)
     await userStore.getUser() //se llama al usuario que se acaba de loguear para saber si es admin o no
-    if(userStore.user.admin){
-      router.push({name: 'adminProfile'})
-    }else{
-      router.push({name: 'my-appoitments'})
-    }
+    // if(userStore.user.admin){
+    //   router.push({name: 'adminProfile'})
+    // }else{
+    //   router.push({name: 'my-appoitments'})
+    // }
+    router.push({name: 'my-appoitments'})
   } catch (error) {
     console.log(error)
     toast.open({
@@ -124,7 +125,8 @@ const login = async () => {
 const fortgotPassword = async () => {
   console.log('desde forgot password')
   try {
-    const result = await userStore.forgottenPassword(email.value);
+    const emial = email.value
+    const result = await AuthAPI.forgotPassword(email);
     toast.open({
         message: result.data.msg,
         type: 'success'
@@ -296,6 +298,8 @@ body {
   min-height: 580px;
   margin: auto;
   margin-top: 5%;
+  margin-bottom: 5%;
+
 }
 @media (max-width: 760px) {
   .container{

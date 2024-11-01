@@ -15,6 +15,7 @@
     const date = ref('')
     const hours = ref([])
     const time = ref('')
+    const totalToPay = ref('')
     const user = ref({
       name: '',
       phone: '',
@@ -42,8 +43,8 @@
         time.value = data.filter( appoitment => appoitment._id === appoitmentId.value)[0].time
 
       }else{
-        console.log('registro nuevo ')
-        appoitmentsByDate.value = data ;
+        // we call the method to fetch the data for the date selected
+        getAppoitmentsBydate()
       }
     })
 
@@ -82,19 +83,6 @@
       services.value = []
       date.value = ''
       time.value = ''
-    }
-
-    async function getAllAppoitments() {
-      const user = userStore.user
-      if (user.admin){
-        try {
-          const result = await AppoitmentApi.getAll()
-          console.log(result)
-          return result
-        } catch (error) {
-          console.log(error)
-        }
-      }
     }
 
     async function updateAppoitment() {
@@ -155,6 +143,19 @@
 
       console.log(appoitmentId.value)
     }
+
+    async function  getAppoitmentsBydate(){
+      try {
+        console.log(date.value)
+        const isoDate = converToISO(date.value)
+        console.log(isoDate)
+        const { data } = await AppoitmentApi.getByDate(date.value)
+        appoitmentsByDate = data
+        console.log(data)
+      } catch (error) {
+        console.log(error)
+      }
+    }
     const isServiceSelected = computed(() => {
       return (id) => services.value.some(servicio._id === id)
     })
@@ -207,6 +208,7 @@
 
     return {
       totalAmount,
+      totalToPay,
       services,
       date,
       hours,
@@ -217,7 +219,6 @@
       onServiceSelected,
       createAppoitment,
       getAppoitmentsById,
-      getAllAppoitments,
       setSelectedAppoitment,
       updateAppoitment,
       clearAppoitmentData,

@@ -15,7 +15,7 @@ const router = createRouter({
       path: '/admin',
       name: 'admin',
       component: () => import('../views/admin/AdminLayout.vue'),
-      meta: { requiresAuth: true},
+      meta: { requiresAdmin: true},
       children: [
         {
           path: 'crear-servicio',
@@ -96,7 +96,7 @@ const router = createRouter({
       name: 'auth',
       component: () => import('@/views/auth/AuthLayout.vue'),
       children: [
-        
+
         {
           path: 'confirmar-cuenta/:token',
           name: 'confirm-account',
@@ -133,8 +133,12 @@ router.beforeEach(async (to, from, next) => {
   //si la pagina necesita ser autentica se ejecuta la siguiente condcion
   if (requiresAuth){
     try {
-      await AuthAPI.auth()// se llama el endpoint para validar el usuario
-      next() // si es exitosa la validacion se muestra la siguiente vista
+      const { data } = await AuthAPI.auth()// se llama el endpoint para validar el usuario
+      if (data.admin){
+        next('/admin')
+      }else {
+        next() // si es exitosa la validacion se muestra la siguiente vista
+      }
     } catch (error) {
       next({name: 'login'})
     }
@@ -143,4 +147,23 @@ router.beforeEach(async (to, from, next) => {
     next()
   }
 })
+
+// con esta segunda condicion verificamos si el usuario es administrador para poderle mostrar el contenido de administrador
+
+router.beforeEach(async (to, from, next) => {
+  const requiresAdmin = to.matched.some(url => url.meta.requiresAdmin) // confirma que pagina debe ser authenticada
+  //si la pagina necesita ser autentica se ejecuta la siguiente condcion
+  if (requiresAdmin){
+   try {
+    await AuthAPI.admin()
+    next()
+   } catch (error) {
+      next({name: 'login'})
+   }
+  }else {
+    //sino muestra la vista solicitada
+    next()
+  }
+})
+
 export default router
